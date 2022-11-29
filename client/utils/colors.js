@@ -6,5 +6,6 @@ const Colors = {
   iconColor: "#6CB242",
   white: "#ffffff",
   error: "#ea0000",
+  red: "#b70000",
 };
 export default Colors;

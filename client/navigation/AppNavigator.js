@@ -20,7 +20,11 @@ const Tab = createBottomTabNavigator();
 
 function Home() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarHideOnKeyboard: true,
+      }}
+    >
       <Tab.Screen
         name="Anasayfa"
         component={FeedScreen}

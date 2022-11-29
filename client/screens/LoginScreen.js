@@ -18,6 +18,10 @@ import * as authActions from "../redux/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TextInput } from "react-native-paper";
 import Colors from "../utils/colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 // validation schema
 const formSchema = yup.object({
@@ -73,7 +77,7 @@ const LoginScreen = (navigator) => {
             <View style={styles.inputContainer}>
               <TextInput
                 mode="outlined"
-                style={{ width: 300, height: 35 }}
+                style={{ width: 300, height: 35, marginBottom: -hp("1%") }}
                 outlineColor={Colors.inputColor}
                 underlineColor={Colors.inputColor}
                 activeOutlineColor={Colors.activeInputColor}
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
   error: {
     color: Colors.error,
     marginLeft: 10,
-    marginVertical: 2.5,
+    marginTop: 8,
   },
   errorUnTouched: {
     width: 0,

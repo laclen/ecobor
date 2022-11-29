@@ -1,12 +1,35 @@
 import React from "react";
-import { StyleSheet, View, FlatList, StatusBar, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  StatusBar,
+  Platform,
+  RefreshControl,
+} from "react-native";
 import Product from "../component/Product";
 import { useEffect } from "react";
 import { Searchbar } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import * as productActions from "../redux/productSlice";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import Colors from "../utils/colors";
+
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const FeedScreen = (props) => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const renderItem = ({ item }) => (
     <Product
       navigation={props.navigation}
@@ -31,19 +54,40 @@ const FeedScreen = (props) => {
   const products = useSelector((state) => state.product.products);
 
   const [searchQuery, setSearchQuery] = React.useState("");
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const [filteredData, setFilteredData] = React.useState(products);
+  const [masterData, setMasterData] = React.useState(products);
+
+  useEffect(() => {
+    setFilteredData(products);
+    setMasterData(products);
+  }, [products]);
+
+  const searchFilter = (query) => {
+    if (query) {
+      const data = masterData.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const textData = query.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(data);
+      setSearchQuery(query);
+    } else {
+      setFilteredData(masterData);
+      setSearchQuery(query);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.searchBarWrapper}>
         <Searchbar
           style={styles.searchBar}
-          placeholder="Marka, ürün veya kategori ara"
-          onChangeText={onChangeSearch}
+          iconColor={Colors.activeInputColor}
+          placeholder="Ürün veya kategori ara"
           value={searchQuery}
+          onChangeText={(text) => searchFilter(text)}
         />
       </View>
-
       <FlatList
         numColumns={2}
         contentContainerStyle={
@@ -51,12 +95,16 @@ const FeedScreen = (props) => {
             ? styles.listWrapperAndroid
             : styles.listWrapperIOS
         }
+        columnWrapperStyle={{ justifyContent: "space-between" }}
         maxToRenderPerBatch={10}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        data={products}
+        data={filteredData}
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
@@ -79,8 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   listWrapperAndroid: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingHorizontal: hp("1%"),
   },
   listWrapperIOS: {
     alignSelf: "center",

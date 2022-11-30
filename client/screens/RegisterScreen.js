@@ -88,10 +88,8 @@ const RegisterScreen = (navigator) => {
                 <TextInput
                   mode="outlined"
                   style={styles.input}
-                  outlineColor={Colors.inputColor}
-                  underlineColor={Colors.inputColor}
-                  activeOutlineColor={Colors.activeInputColor}
-                  activeUnderlineColor={Colors.activeInputColor}
+                  outlineColor={Colors.lightGreen}
+                  activeOutlineColor={Colors.darkGreen}
                   label="İsim & Soyisim"
                   keyboardType="default"
                   onChangeText={props.handleChange("fullName")}
@@ -104,7 +102,7 @@ const RegisterScreen = (navigator) => {
                           name={"person-circle-outline"}
                           size={24}
                           style={styles.icon}
-                          color={Colors.iconColor}
+                          color={Colors.lightGreen}
                         />
                       )}
                     />
@@ -125,10 +123,8 @@ const RegisterScreen = (navigator) => {
                 <TextInput
                   mode="outlined"
                   style={styles.input}
-                  outlineColor={Colors.inputColor}
-                  underlineColor={Colors.inputColor}
-                  activeOutlineColor={Colors.activeInputColor}
-                  activeUnderlineColor={Colors.activeInputColor}
+                  outlineColor={Colors.lightGreen}
+                  activeOutlineColor={Colors.darkGreen}
                   label="E-posta"
                   keyboardType="email-address"
                   onChangeText={props.handleChange("email")}
@@ -138,7 +134,7 @@ const RegisterScreen = (navigator) => {
                     <TextInput.Icon
                       icon="email"
                       style={styles.icon}
-                      color={Colors.iconColor}
+                      color={Colors.lightGreen}
                     />
                   }
                 />
@@ -157,17 +153,15 @@ const RegisterScreen = (navigator) => {
                 <TextInput
                   mode="outlined"
                   style={styles.input}
-                  outlineColor={Colors.inputColor}
-                  underlineColor={Colors.inputColor}
-                  activeOutlineColor={Colors.activeInputColor}
-                  activeUnderlineColor={Colors.activeInputColor}
+                  outlineColor={Colors.lightGreen}
+                  activeOutlineColor={Colors.darkGreen}
                   label="Şifre"
                   secureTextEntry={secureTextEntry}
                   right={
                     <TextInput.Icon
                       icon="eye"
                       style={{ paddingTop: 7 }}
-                      color={Colors.iconColor}
+                      color={Colors.lightGreen}
                       onPress={() => {
                         setSecureTextEntry(!secureTextEntry);
                         return false;
@@ -178,7 +172,7 @@ const RegisterScreen = (navigator) => {
                     <TextInput.Icon
                       icon="key"
                       style={styles.icon}
-                      color={Colors.iconColor}
+                      color={Colors.lightGreen}
                     />
                   }
                   onChangeText={props.handleChange("password")}
@@ -200,10 +194,8 @@ const RegisterScreen = (navigator) => {
                 <TextInput
                   mode="outlined"
                   style={styles.input}
-                  outlineColor={Colors.inputColor}
-                  underlineColor={Colors.inputColor}
-                  activeOutlineColor={Colors.activeInputColor}
-                  activeUnderlineColor={Colors.activeInputColor}
+                  outlineColor={Colors.lightGreen}
+                  activeOutlineColor={Colors.darkGreen}
                   label="Telefon numarası"
                   keyboardType="phone-pad"
                   onChangeText={props.handleChange("phoneNumber")}
@@ -216,7 +208,7 @@ const RegisterScreen = (navigator) => {
                           style={styles.icon}
                           name="phone"
                           size={24}
-                          color={Colors.iconColor}
+                          color={Colors.lightGreen}
                         />
                       )}
                     />
@@ -237,10 +229,8 @@ const RegisterScreen = (navigator) => {
                 <TextInput
                   mode="outlined"
                   style={styles.input}
-                  outlineColor={Colors.inputColor}
-                  underlineColor={Colors.inputColor}
-                  activeOutlineColor={Colors.activeInputColor}
-                  activeUnderlineColor={Colors.activeInputColor}
+                  outlineColor={Colors.lightGreen}
+                  activeOutlineColor={Colors.darkGreen}
                   label="Adres"
                   keyboardType="default"
                   onChangeText={props.handleChange("address")}
@@ -253,7 +243,7 @@ const RegisterScreen = (navigator) => {
                           name="home"
                           size={24}
                           style={styles.icon}
-                          color={Colors.iconColor}
+                          color={Colors.lightGreen}
                         />
                       )}
                     />
@@ -279,7 +269,7 @@ const RegisterScreen = (navigator) => {
                 </TouchableOpacity>
 
                 <View style={styles.loginContainer}>
-                  <Text style={{ color: "#232627", marginTop: -5 }}>
+                  <Text style={{ color: Colors.fadedBlack, marginTop: -5 }}>
                     Zaten bir hesabınız mı var?
                   </Text>
                   <TouchableOpacity
@@ -326,7 +316,7 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     borderRadius: 10,
-    backgroundColor: Colors.buttonColor,
+    backgroundColor: Colors.lightGreen,
     width: 300,
     height: 40,
     alignItems: "center",
@@ -360,7 +350,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   loginText: {
-    color: Colors.linkColor,
+    color: Colors.lightGreen,
     marginTop: -5,
   },
   icon: {

@@ -17,6 +17,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Colors from "../utils/colors";
+import MyStatusBar from "../component/MyStatusBar";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -79,10 +80,11 @@ const FeedScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <MyStatusBar />
       <View style={styles.searchBarWrapper}>
         <Searchbar
           style={styles.searchBar}
-          iconColor={Colors.activeInputColor}
+          iconColor={Colors.darkGreen}
           placeholder="Ürün veya kategori ara"
           value={searchQuery}
           onChangeText={(text) => searchFilter(text)}
@@ -120,16 +122,21 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 90,
 
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 10 : 30,
-    paddingHorizontal: 15,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : hp("2%"),
+    paddingHorizontal: wp("3.6%"),
+    marginBottom: -wp("8%"),
+
+    // backgroundColor: "red",
   },
   searchBar: {
     borderRadius: 8,
   },
   listWrapperAndroid: {
-    paddingHorizontal: hp("1%"),
+    paddingHorizontal: wp("2%"),
   },
   listWrapperIOS: {
     alignSelf: "center",
+
+    // backgroundColor: "green",
   },
 });

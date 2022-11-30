@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   ScrollView,
+  Appearance,
 } from "react-native";
 import React from "react";
 import { Formik } from "formik";
@@ -22,6 +23,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import MyStatusBar from "../component/MyStatusBar";
+
+const colorScheme = Appearance.getColorScheme();
 
 // validation schema
 const formSchema = yup.object({
@@ -44,6 +48,7 @@ const LoginScreen = (navigator) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       onTouchStart={Keyboard.dismiss}
     >
+      <MyStatusBar />
       <Formik
         initialValues={{
           email: "",
@@ -78,10 +83,8 @@ const LoginScreen = (navigator) => {
               <TextInput
                 mode="outlined"
                 style={{ width: 300, height: 35, marginBottom: -hp("1%") }}
-                outlineColor={Colors.inputColor}
-                underlineColor={Colors.inputColor}
-                activeOutlineColor={Colors.activeInputColor}
-                activeUnderlineColor={Colors.activeInputColor}
+                outlineColor={Colors.lightGreen}
+                activeOutlineColor={Colors.darkGreen}
                 label="E-posta"
                 keyboardType="email-address"
                 onChangeText={props.handleChange("email")}
@@ -91,7 +94,7 @@ const LoginScreen = (navigator) => {
                   <TextInput.Icon
                     icon="email"
                     style={{ paddingTop: 7 }}
-                    color={Colors.iconColor}
+                    color={Colors.lightGreen}
                   />
                 }
               />
@@ -111,17 +114,15 @@ const LoginScreen = (navigator) => {
               <TextInput
                 mode="outlined"
                 style={{ width: 300, height: 35 }}
-                outlineColor={Colors.inputColor}
-                underlineColor={Colors.inputColor}
-                activeOutlineColor={Colors.activeInputColor}
-                activeUnderlineColor={Colors.activeInputColor}
+                outlineColor={Colors.lightGreen}
+                activeOutlineColor={Colors.darkGreen}
                 label="Şifre"
                 secureTextEntry={secureTextEntry}
                 right={
                   <TextInput.Icon
                     icon="eye"
                     style={{ paddingTop: 7 }}
-                    color="#6CB242"
+                    color={Colors.lightGreen}
                     onPress={() => {
                       setSecureTextEntry(!secureTextEntry);
                       return false;
@@ -132,7 +133,7 @@ const LoginScreen = (navigator) => {
                   <TextInput.Icon
                     icon="key"
                     style={{ paddingTop: 7 }}
-                    color="#6CB242"
+                    color={Colors.lightGreen}
                   />
                 }
                 onChangeText={props.handleChange("password")}
@@ -161,7 +162,9 @@ const LoginScreen = (navigator) => {
             </TouchableOpacity>
 
             <View style={styles.registerContainer}>
-              <Text style={{ color: "#232627" }}>Yeni müşteri misiniz?</Text>
+              <Text style={{ color: Colors.fadedBlack }}>
+                Yeni müşteri misiniz?
+              </Text>
               <TouchableOpacity
                 onPress={() => navigator.navigation.navigate("Register")}
               >
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   loginButton: {
     marginTop: 10,
     borderRadius: 10,
-    backgroundColor: "#6CB242",
+    backgroundColor: Colors.lightGreen,
     width: 300,
     height: 40,
     alignItems: "center",
@@ -214,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   registerText: {
-    color: Colors.inputColor,
+    color: Colors.fadedGreen,
   },
   errorText: {
     width: 300,

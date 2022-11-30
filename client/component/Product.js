@@ -28,7 +28,6 @@ const Product = (props) => {
       setIconColor("black");
     }
   }, [isFavToggled]);
-
   return (
     <TouchableOpacity
       onPress={() =>
@@ -54,7 +53,6 @@ const Product = (props) => {
                 }}
               />
             </View>
-            <View style={styles.stockWrapper}></View>
           </View>
         </ImageBackground>
 
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     width: "100%",
-    height: 150,
+    height: hp("22.5%"),
     borderRadius: 10,
   },
   favStockWrapper: {
@@ -107,18 +105,7 @@ const styles = StyleSheet.create({
     paddingTop: hp("0.1%"),
     flexDirection: "column",
   },
-  stockWrapper: {
-    flex: 0.5,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    // marginBottom: hp("3%"),
-    // marginLeft: wp("1%"),
-  },
-  stockCard: {
-    alignItems: "flex-end",
-    borderRadius: 10,
-  },
+
   favWrapper: {
     flex: 0.5,
     flexDirection: "row",
@@ -137,8 +124,10 @@ const styles = StyleSheet.create({
     marginTop: hp("2%"),
   },
   infoContainer: {
-    justifyContent: "space-between",
+    // backgroundColor: "blue",
+
     marginTop: hp("2.25%"),
+    height: hp("20%"),
   },
   name: {
     fontSize: 16,
@@ -153,12 +142,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingHorizontal: 10,
     paddingVertical: 2,
-    color: Colors.activeInputColor,
+    color: Colors.darkGreen,
+  },
+  stockCard: {
+    // backgroundColor: "green",
+
+    alignItems: "flex-end",
+    borderRadius: 10,
+    alignSelf: "flex-end",
   },
   stock: {
     fontSize: 11,
     paddingHorizontal: 10,
     color: Colors.red,
+    marginTop: hp("5%"),
   },
 });
 

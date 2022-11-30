@@ -39,7 +39,7 @@ function Home() {
             <Ionicons
               name={focused ? "ios-home-sharp" : "ios-home-outline"}
               size={focused ? 26 : 24}
-              color={focused ? "green" : "black"}
+              color={focused ? Colors.darkGreen : Colors.fadedBlack}
             />
           ),
         }}
@@ -57,7 +57,7 @@ function Home() {
             <Ionicons
               name={focused ? "heart-sharp" : "heart-outline"}
               size={focused ? 26 : 24}
-              color={focused ? "green" : "black"}
+              color={focused ? Colors.darkGreen : Colors.fadedBlack}
             />
           ),
         }}
@@ -75,9 +75,10 @@ function Home() {
             <Ionicons
               name={focused ? "cart-sharp" : "cart-outline"}
               size={focused ? 26 : 24}
-              color={focused ? "green" : "black"}
+              color={focused ? Colors.darkGreen : Colors.fadedBlack}
             />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -93,7 +94,7 @@ function Home() {
             <Ionicons
               name={focused ? "person-sharp" : "person-outline"}
               size={focused ? 26 : 24}
-              color={focused ? "green" : "black"}
+              color={focused ? Colors.darkGreen : Colors.fadedBlack}
             />
           ),
         }}
@@ -138,7 +139,7 @@ export default function AppNavigator() {
 
 const styles = StyleSheet.create({
   activeLabel: {
-    color: Colors.activeInputColor,
+    color: Colors.darkGreen,
     fontSize: 12,
     marginBottom: 3,
     marginTop: -2,

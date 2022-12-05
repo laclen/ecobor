@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   StyleSheet,
   View,
@@ -6,30 +6,30 @@ import {
   StatusBar,
   Platform,
   RefreshControl,
-} from "react-native";
-import Product from "../component/Product";
-import { useEffect } from "react";
-import { Searchbar } from "react-native-paper";
-import { useDispatch, useSelector } from "react-redux";
-import * as productActions from "../redux/productSlice";
+} from "react-native"
+import Product from "../component/Product"
+import { useEffect } from "react"
+import { Searchbar } from "react-native-paper"
+import { useDispatch, useSelector } from "react-redux"
+import * as productActions from "../redux/productSlice"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import Colors from "../utils/colors";
-import MyStatusBar from "../component/MyStatusBar";
+} from "react-native-responsive-screen"
+import Colors from "../utils/colors"
+import MyStatusBar from "../component/MyStatusBar"
 
 const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
+  return new Promise((resolve) => setTimeout(resolve, timeout))
+}
 
 const FeedScreen = (props) => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false)
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+    setRefreshing(true)
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
 
   const renderItem = ({ item }) => (
     <Product
@@ -41,42 +41,42 @@ const FeedScreen = (props) => {
       description={item.description}
       stock={item.stock}
     />
-  );
+  )
 
-  const dataStatus = useSelector((state) => state.product.status);
-  const dispatch = useDispatch();
+  const dataStatus = useSelector((state) => state.product.status)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (dataStatus === "idle") {
-      dispatch(productActions.fetchData());
+      dispatch(productActions.fetchData())
     }
-  }, [dispatch]);
+  }, [dispatch])
 
-  const products = useSelector((state) => state.product.products);
+  const products = useSelector((state) => state.product.products)
 
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [filteredData, setFilteredData] = React.useState(products);
-  const [masterData, setMasterData] = React.useState(products);
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [filteredData, setFilteredData] = React.useState(products)
+  const [masterData, setMasterData] = React.useState(products)
 
   useEffect(() => {
-    setFilteredData(products);
-    setMasterData(products);
-  }, [products]);
+    setFilteredData(products)
+    setMasterData(products)
+  }, [products])
 
   const searchFilter = (query) => {
     if (query) {
       const data = masterData.filter((item) => {
-        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
-        const textData = query.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      setFilteredData(data);
-      setSearchQuery(query);
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase()
+        const textData = query.toUpperCase()
+        return itemData.indexOf(textData) > -1
+      })
+      setFilteredData(data)
+      setSearchQuery(query)
     } else {
-      setFilteredData(masterData);
-      setSearchQuery(query);
+      setFilteredData(masterData)
+      setSearchQuery(query)
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -109,22 +109,21 @@ const FeedScreen = (props) => {
         }
       />
     </View>
-  );
-};
+  )
+}
 
-export default FeedScreen;
+export default FeedScreen
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   searchBarWrapper: {
-    width: "100%",
-    height: 90,
+    width: wp("100%"),
+    height: hp("15%"),
 
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : hp("2%"),
     paddingHorizontal: wp("3.6%"),
-    marginBottom: -wp("8%"),
 
     // backgroundColor: "red",
   },
@@ -133,10 +132,12 @@ const styles = StyleSheet.create({
   },
   listWrapperAndroid: {
     paddingHorizontal: wp("2%"),
+    // backgroundColor: "green",
+    paddingBottom: hp("10%"),
   },
   listWrapperIOS: {
     alignSelf: "center",
 
     // backgroundColor: "green",
   },
-});
+})

@@ -1,33 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from "react"
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TouchableOpacity,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "../utils/colors";
-import { AirbnbRating } from "react-native-ratings";
+  Platform,
+} from "react-native"
+import { Ionicons } from "@expo/vector-icons"
+import Colors from "../utils/colors"
+import { AirbnbRating } from "react-native-ratings"
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from "react-native-responsive-screen"
 
 const Product = (props) => {
-  const [isFavToggled, setIsFavToggled] = React.useState(false);
-  const [iconName, setIconName] = React.useState("heart-outline");
-  const [iconColor, setIconColor] = React.useState("black");
+  const [isFavToggled, setIsFavToggled] = React.useState(false)
+  const [iconName, setIconName] = React.useState("heart-outline")
+  const [iconColor, setIconColor] = React.useState("black")
 
   useEffect(() => {
     if (isFavToggled) {
-      setIconName("heart-sharp");
-      setIconColor("#b70000");
+      setIconName("heart-sharp")
+      setIconColor("#b70000")
     } else {
-      setIconName("heart-outline");
-      setIconColor("black");
+      setIconName("heart-outline")
+      setIconColor("black")
     }
-  }, [isFavToggled]);
+  }, [isFavToggled])
   return (
     <TouchableOpacity
       onPress={() =>
@@ -49,7 +50,7 @@ const Product = (props) => {
                 color={iconColor}
                 style={styles.favIcon}
                 onPress={() => {
-                  setIsFavToggled(!isFavToggled);
+                  setIsFavToggled(!isFavToggled)
                 }}
               />
             </View>
@@ -57,7 +58,9 @@ const Product = (props) => {
         </ImageBackground>
 
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{props.name}</Text>
+          <Text numberOfLines={2} style={styles.name}>
+            {props.name}
+          </Text>
 
           <View style={styles.ratingWrapper}>
             <AirbnbRating showRating={false} size={12} />
@@ -66,14 +69,20 @@ const Product = (props) => {
           <Text style={styles.price}>{props.price}₺</Text>
           <View style={styles.stockCard}>
             {props.stock <= 3 ? (
-              <Text style={styles.stock}>Sadece {props.stock} adet kaldı!</Text>
+              <Text
+                style={
+                  Platform.OS === "ios" ? styles.stock : styles.stockAndroid
+                }
+              >
+                Sadece {props.stock} adet kaldı!
+              </Text>
             ) : null}
           </View>
         </View>
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -157,6 +166,12 @@ const styles = StyleSheet.create({
     color: Colors.red,
     marginTop: hp("5%"),
   },
-});
+  stockAndroid: {
+    fontSize: 11,
+    paddingHorizontal: 10,
+    color: Colors.red,
+    marginTop: hp("2%"),
+  },
+})
 
-export default Product;
+export default Product

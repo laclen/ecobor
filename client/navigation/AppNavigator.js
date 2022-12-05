@@ -1,22 +1,22 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import FeedScreen from "../screens/FeedScreen";
-import FavoritesScreen from "../screens/FavoritesScreen";
-import CartScreen from "../screens/CartScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import ProductScreen from "../screens/ProductScreen";
-import { Ionicons } from "@expo/vector-icons";
-import Colors from "../utils/colors";
+import React from "react"
+import { Text, StyleSheet } from "react-native"
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import WelcomeScreen from "../screens/WelcomeScreen"
+import LoginScreen from "../screens/LoginScreen"
+import RegisterScreen from "../screens/RegisterScreen"
+import FeedScreen from "../screens/FeedScreen"
+import FavoritesScreen from "../screens/FavoritesScreen"
+import CartScreen from "../screens/CartScreen"
+import SettingsScreen from "../screens/SettingsScreen"
+import ProductScreen from "../screens/ProductScreen"
+import { Ionicons } from "@expo/vector-icons"
+import Colors from "../utils/colors"
 
 // initialize stack and bottom tab navigator
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
 function Home() {
   return (
@@ -100,7 +100,7 @@ function Home() {
         }}
       />
     </Tab.Navigator>
-  );
+  )
 }
 
 export default function AppNavigator() {
@@ -134,7 +134,7 @@ export default function AppNavigator() {
         />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -150,4 +150,4 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     marginTop: -2,
   },
-});
+})

@@ -228,22 +228,23 @@ router.put("/favoriler/:id", async (req, res) => {
       customerFavorites = customer.favorites
     })
     .catch((err) => console.log(err))
-
-  // favorilerinde seçilen ürün var mı kontrol et
-  const productInFavorites = await customerFavorites
-    .findIndex((elem) => elem === product)
-    .then((index) => {
-      index === -1 ? false : index
-    })
+  console.log(customerFavorites)
+  // favorilerinde seçilen ürün var mı kontrol et varsa indexini al, yoksa -1
+  const productIndex = await customerFavorites.findIndex(
+    (elem) => elem === product
+  )
+  console.log("productIndex: " + productIndex)
 
   // ürün favorilerde yoksa ekle, varsa çıkar
-  if (!productInFavorites) {
+  if (productIndex === -1) {
+    const incrementedFavorites = [...customerFavorites, product]
+    console.log("incrementedFavorites: " + incrementedFavorites)
+
     await Customer.findByIdAndUpdate(customerId, {
-      favorites: [...favorites, product],
+      favorites: incrementedFavorites,
     })
       .then((customer) => {
         customer.save()
-        return customer
       })
       .catch((err) =>
         res.send({
@@ -253,12 +254,13 @@ router.put("/favoriler/:id", async (req, res) => {
         })
       )
   } else {
+    // ürün listede zaten var, customerFavorites ve favorites güncelle
+    customerFavorites.splice(productIndex, 1)
     await Customer.findByIdAndUpdate(customerId, {
-      favorites: [customerFavorites.splice(productInFavorites, 1)],
+      favorites: customerFavorites,
     })
       .then((customer) => {
         customer.save()
-        return customer
       })
       .catch((err) =>
         res.send({
@@ -268,6 +270,12 @@ router.put("/favoriler/:id", async (req, res) => {
         })
       )
   }
+
+  Customer.findById(customerId)
+    .then((customer) => {
+      res.send(customer)
+    })
+    .catch((err) => console.log(err))
 })
 
 module.exports = router

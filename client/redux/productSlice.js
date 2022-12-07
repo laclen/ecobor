@@ -5,6 +5,7 @@ const BASE = Platform.OS === "android" ? "192.168.1.120" : "192.168.1.120"
 
 const initialState = {
   products: [],
+  product: {},
   status: "idle",
   error: null,
 }
@@ -37,7 +38,7 @@ export const fetchProduct = createAsyncThunk(
       }
     )
 
-    const response = await getProducts.json()
+    const response = await getProduct.json()
     // console.log(response);
     return response
   }
@@ -59,6 +60,9 @@ const productSlice = createSlice({
       .addCase(fetchData.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.error.message
+      })
+      .addCase(fetchProduct.fulfilled, (state, action) => {
+        state.product = action.payload
       })
   },
 })

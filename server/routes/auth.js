@@ -273,7 +273,7 @@ router.put("/favoriler/:id", async (req, res) => {
 
   Customer.findById(customerId)
     .then((customer) => {
-      res.send(customer)
+      res.send(customer.favorites)
     })
     .catch((err) => console.log(err))
 })

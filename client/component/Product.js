@@ -14,8 +14,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen"
+import { useDispatch } from "react-redux"
+import * as customerActions from "../redux/customerSlice"
 
 const Product = (props) => {
+  // get user info for updating favorites
+  const dispatch = useDispatch()
+
   const [isFavToggled, setIsFavToggled] = React.useState(false)
   const [iconName, setIconName] = React.useState("heart-outline")
   const [iconColor, setIconColor] = React.useState("black")
@@ -29,6 +34,7 @@ const Product = (props) => {
       setIconColor("black")
     }
   }, [isFavToggled])
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -51,6 +57,9 @@ const Product = (props) => {
                 style={styles.favIcon}
                 onPress={() => {
                   setIsFavToggled(!isFavToggled)
+                  dispatch(
+                    customerActions.updateFavorites(props.customer, props._id)
+                  )
                 }}
               />
             </View>

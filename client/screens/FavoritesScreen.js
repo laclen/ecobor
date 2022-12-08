@@ -1,46 +1,37 @@
-import { FlatList, StyleSheet, Text, View } from "react-native"
-import React from "react"
-import Product from "../component/Product"
-import { useDispatch, useSelector } from "react-redux"
-import * as customerActions from "../redux/customerSlice"
-import * as productActions from "../redux/productSlice"
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import Product from "../component/Product";
+import { useDispatch, useSelector } from "react-redux";
+import * as customerActions from "../redux/customerSlice";
+import * as productActions from "../redux/productSlice";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
 const FavoritesScreen = (props) => {
-  // we will use dispatch for fetching favorites of customer from customer object, and updating favorites array in the redux store
-  const dispatch = useDispatch()
-  // get the customer - NO INTERNET - CHECK WHETHER TO GET CUSTOMER FROM REDUX OR DB, CHECK HOW IT IS STORED IN REDUX CUSTOMER STORE
-  // const customer = dispatch(AuthActions.getCustomer())
-  // console.log(customer)
+  const dispatch = useDispatch();
 
-  // get the customer id
-  const customerId = useSelector((state) => state.auth.customer.data._id)
-  // console.log(customerId)
+  const [favListToRender, setFavListToRender] = React.useState([]);
 
-  // fetch full info of customer into customer redux store to after derive the favorites list
+  // we need logged in customer's id to work with customer's favorites list in db
+  const customerFavList = useSelector(
+    (state) => state.customer.customer.favorites
+  );
+  // console.log("####### customerFavList #######");
+  // console.log(customerFavList);
+
+  // we need to create an array with the objects of products that are corresponding of the ids inside customerFavList
   React.useEffect(() => {
-    dispatch(customerActions.getCustomer(customerId))
-  }, [customerId])
+    customerFavList.map((productId) => {
+      dispatch(productActions.getProductInfo(productId)).then((response) => {
+        setFavListToRender((prevState) => [...prevState, response.payload]);
+      });
+    });
+  }, [customerFavList]);
 
-  const customer = useSelector((state) => state.customer.customer)
-  console.log(customer)
-  const favoritesArr = typeof customer.favorites // BU OBJE OLARAK GELİYOR BUNU ÇÖZ ÖNCE
-  console.log(favoritesArr)
-
-  // const favoritesList = favoritesArr.map((productId) => {
-  //   console.log(productId)
-  // })
-
-  // console.log(favoritesList)
-  // let favoritesList
-  // React.useEffect(() => {
-  //   favoritesList = favoritesArr.map((item) =>
-  //     dispatch(ProductActions.fetchProduct(item))
-  //   )
-  // })
+  // console.log("####### favListToRender #######");
+  // console.log(favListToRender);
 
   const renderItem = ({ item }) => (
     <Product
@@ -51,13 +42,12 @@ const FavoritesScreen = (props) => {
       price={item.price}
       description={item.description}
       stock={item.stock}
-      customer={customerId}
     />
-  )
+  );
 
   return (
     <View style={styles.container}>
-      {/* <FlatList
+      <FlatList
         numColumns={2}
         contentContainerStyle={
           Platform.OS === "android"
@@ -68,15 +58,15 @@ const FavoritesScreen = (props) => {
         maxToRenderPerBatch={10}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        data={favoritesList}
+        data={favListToRender}
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
-      /> */}
+      />
     </View>
-  )
-}
+  );
+};
 
-export default FavoritesScreen
+export default FavoritesScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -92,4 +82,4 @@ const styles = StyleSheet.create({
 
     // backgroundColor: "green",
   },
-})
+});

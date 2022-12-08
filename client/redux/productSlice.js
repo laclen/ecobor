@@ -1,14 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { Platform } from "react-native"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Platform } from "react-native";
 
-const BASE = Platform.OS === "android" ? "192.168.1.120" : "192.168.1.120"
+const BASE = Platform.OS === "android" ? "192.168.1.120" : "192.168.1.120";
 
 const initialState = {
   products: [],
-  product: {},
+  productInfo: [],
   status: "idle",
+  productInfoStatus: "",
   error: null,
-}
+};
 
 // fetch all the products
 export const fetchData = createAsyncThunk("FETCH_PRODUCTS", async () => {
@@ -17,15 +18,14 @@ export const fetchData = createAsyncThunk("FETCH_PRODUCTS", async () => {
     headers: {
       "Content-Type": "application/json",
     },
-  })
+  });
 
-  const response = await getProducts.json()
-  // console.log(response);
-  return response
-})
+  const response = await getProducts.json();
+  return response;
+});
 
 // get product with id
-export const fetchProduct = createAsyncThunk(
+export const getProductInfo = createAsyncThunk(
   "GET_PRODUCT",
   async (productId) => {
     const getProduct = await fetch(
@@ -36,35 +36,40 @@ export const fetchProduct = createAsyncThunk(
           "Content-Type": "application/json",
         },
       }
-    )
+    );
 
-    const response = await getProduct.json()
+    const response = await getProduct.json();
     // console.log(response);
-    return response
+    return response;
   }
-)
+);
 
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchData.pending, (state, action) => {
-        state.status = "loading"
+        state.status = "loading";
       })
       .addCase(fetchData.fulfilled, (state, action) => {
-        state.status = "succeeded"
-        state.products = state.products.concat(action.payload)
+        state.status = "succeeded";
+        state.products = state.products.concat(action.payload);
       })
       .addCase(fetchData.rejected, (state, action) => {
-        state.status = "failed"
-        state.error = action.error.message
+        state.status = "failed";
+        state.error = action.error.message;
       })
-      .addCase(fetchProduct.fulfilled, (state, action) => {
-        state.product = action.payload
+      .addCase(getProductInfo.pending, (state, action) => {
+        state.productInfo = "loading";
       })
+      .addCase(getProductInfo.fulfilled, (state, action) => {
+        state.productInfo = action.payload;
+      })
+      .addCase(getProductInfo.rejected, (state, action) => {
+        state.productInfo = "loading";
+      });
   },
-})
+});
 
-export default productSlice.reducer
+export default productSlice.reducer;

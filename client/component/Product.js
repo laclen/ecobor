@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,34 +6,42 @@ import {
   ImageBackground,
   TouchableOpacity,
   Platform,
-} from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import Colors from "../utils/colors"
-import { AirbnbRating } from "react-native-ratings"
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "../utils/colors";
+import { AirbnbRating } from "react-native-ratings";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen"
-import { useDispatch } from "react-redux"
-import * as customerActions from "../redux/customerSlice"
+} from "react-native-responsive-screen";
+import { useDispatch, useSelector } from "react-redux";
+import * as CustomerActions from "../redux/customerSlice";
 
 const Product = (props) => {
-  // get user info for updating favorites
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [isFavToggled, setIsFavToggled] = React.useState(false)
-  const [iconName, setIconName] = React.useState("heart-outline")
-  const [iconColor, setIconColor] = React.useState("black")
+  const customer = useSelector((state) => state.customer.customer);
+  const customerId = customer._id;
+  const customerFavorites = customer.favorites;
 
-  useEffect(() => {
+  const inFavorites =
+    customerFavorites.indexOf(props._id) === -1 ? false : true;
+
+  const [isFavToggled, setIsFavToggled] = React.useState(inFavorites);
+  const [iconName, setIconName] = React.useState("heart-outline");
+  const [iconColor, setIconColor] = React.useState("black");
+
+  useLayoutEffect(() => {
     if (isFavToggled) {
-      setIconName("heart-sharp")
-      setIconColor("#b70000")
+      setIconName("heart-sharp");
+      setIconColor("#b70000");
     } else {
-      setIconName("heart-outline")
-      setIconColor("black")
+      setIconName("heart-outline");
+      setIconColor("black");
     }
-  }, [isFavToggled])
+
+    // dispatch(CustomerActions.updateFavorites(customerId, props._id));
+  }, [isFavToggled]);
 
   return (
     <TouchableOpacity
@@ -56,10 +64,7 @@ const Product = (props) => {
                 color={iconColor}
                 style={styles.favIcon}
                 onPress={() => {
-                  setIsFavToggled(!isFavToggled)
-                  dispatch(
-                    customerActions.updateFavorites(props.customer, props._id)
-                  )
+                  setIsFavToggled(!isFavToggled);
                 }}
               />
             </View>
@@ -90,8 +95,8 @@ const Product = (props) => {
         </View>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -181,6 +186,6 @@ const styles = StyleSheet.create({
     color: Colors.red,
     marginTop: hp("2%"),
   },
-})
+});
 
-export default Product
+export default Product;

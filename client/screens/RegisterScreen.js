@@ -21,6 +21,7 @@ import * as authActions from "../redux/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TextInput } from "react-native-paper";
 import Colors from "../utils/colors";
+import * as CustomerActions from "../redux/customerSlice";
 
 // validation schema
 const formSchema = yup.object({
@@ -62,8 +63,11 @@ const RegisterScreen = (navigator) => {
                 try {
                   await AsyncStorage.setItem("token", response.payload.token);
                   navigator.navigation.navigate("Home");
+                  dispatch(
+                    CustomerActions.getCustomer(response.payload.data._id)
+                  );
                 } catch (error) {
-                  console.log(error);
+                  console.log("Register error: " + error);
                 }
               } else {
                 Alert.alert(response.payload.message);

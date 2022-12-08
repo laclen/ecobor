@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as authActions from "../redux/authSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TextInput } from "react-native-paper";
@@ -24,6 +24,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import MyStatusBar from "../component/MyStatusBar";
+import * as CustomerActions from "../redux/customerSlice";
 
 const colorScheme = Appearance.getColorScheme();
 
@@ -62,8 +63,11 @@ const LoginScreen = (navigator) => {
               try {
                 await AsyncStorage.setItem("token", response.payload.token);
                 navigator.navigation.navigate("Home");
+                dispatch(
+                  CustomerActions.getCustomer(response.payload.data._id)
+                );
               } catch (error) {
-                console.log(error);
+                console.log("Login error: " + error);
               }
             } else {
               Alert.alert(response.payload.msg);

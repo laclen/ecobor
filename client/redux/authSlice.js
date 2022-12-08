@@ -1,21 +1,21 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { Platform } from "react-native"
-const BASE = Platform.OS === "android" ? "192.168.1.120" : "192.168.1.120"
-const PORT = "3000"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Platform } from "react-native";
+const BASE = Platform.OS === "android" ? "192.168.1.120" : "192.168.1.120";
+const PORT = "3000";
 
 const initialState = {
   customer: {},
   error: {},
   registerVerified: "",
   loginVerified: "",
-}
+};
 
 // customer user action
 export const registerCustomer = createAsyncThunk(
   "REGISTER_CUSTOMER",
   async (authData) => {
     // derive the data from authData
-    const { fullName, email, password, phoneNumber, address } = authData
+    const { fullName, email, password, phoneNumber, address } = authData;
 
     const postRequest = await fetch(
       `http://${BASE}:${PORT}/api/customer/register`,
@@ -32,19 +32,19 @@ export const registerCustomer = createAsyncThunk(
           address,
         }),
       }
-    )
-    const response = await postRequest.json()
+    );
+    const response = await postRequest.json();
     //  console.log(response)
-    return response
+    return response;
   }
-)
+);
 
 // customer login action
 export const loginCustomer = createAsyncThunk(
   "LOGIN_CUSTOMER",
   async (authData) => {
     // derive the data from authData by deconstructuring it
-    const { email, password } = authData
+    const { email, password } = authData;
     //  console.log(email)
     const postRequest = await fetch(
       `http://${BASE}:${PORT}/api/customer/login`,
@@ -58,56 +58,12 @@ export const loginCustomer = createAsyncThunk(
           password,
         }),
       }
-    )
-    const response = await postRequest.json()
+    );
+    const response = await postRequest.json();
     //  console.log(response)
-    return response
+    return response;
   }
-)
-
-// get customer action
-export const getCustomer = createAsyncThunk(
-  "GET_CUSTOMER",
-  async (customerId) => {
-    const getRequest = await fetch(
-      `http://${BASE}:${PORT}/api/customer/${customerId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-    const response = await getRequest.json()
-    //  console.log(response)
-    return response
-  }
-)
-
-// add given item to favorites list of given customer or delete item if its in favorites
-export const updateFavorites = createAsyncThunk(
-  "UPDATE_FAVORITES",
-  async (customerId, productId) => {
-    // add product into customer's favorites
-    const putRequest = await fetch(
-      `http://${BASE}:${PORT}/api/customer/favoriler/${customerId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: productId,
-        }),
-      }
-    )
-
-    // delete product from customer's favorites
-    const response = await postRequest.json()
-    //  console.log(response)
-    return response
-  }
-)
+);
 
 const authSlice = createSlice({
   name: "authorization",
@@ -115,28 +71,28 @@ const authSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(registerCustomer.pending, (state) => {
-        state.registerVerified = "trying"
+        state.registerVerified = "trying";
       })
       .addCase(registerCustomer.fulfilled, (state, action) => {
-        state.registerVerified = "success"
-        state.customer = action.payload
+        state.registerVerified = "success";
+        state.customer = action.payload;
       })
       .addCase(registerCustomer.rejected, (state, action) => {
-        state.registerVerified = "failed"
-        state.error = action.payload
+        state.registerVerified = "failed";
+        state.error = action.payload;
       })
       .addCase(loginCustomer.pending, (state) => {
-        state.loginVerified = "trying"
+        state.loginVerified = "trying";
       })
       .addCase(loginCustomer.fulfilled, (state, action) => {
-        state.loginVerified = "success"
-        state.customer = action.payload
+        state.loginVerified = "success";
+        state.customer = action.payload;
       })
       .addCase(loginCustomer.rejected, (state, action) => {
-        state.loginVerified = "failed"
-        state.error = action.payload
-      })
+        state.loginVerified = "failed";
+        state.error = action.payload;
+      });
   },
-})
+});
 
-export default authSlice.reducer
+export default authSlice.reducer;

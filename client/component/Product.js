@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,6 +16,17 @@ import {
 } from "react-native-responsive-screen";
 import { useDispatch, useSelector } from "react-redux";
 import * as CustomerActions from "../redux/customerSlice";
+import { LinearGradient } from "expo-linear-gradient";
+
+const ProductLoading = () => {
+  return (
+    <LinearGradient
+      colors={["gainsboro", "white"]}
+      style={styles.loaderContainer}
+      start={{ x: 0.7, y: 0 }}
+    ></LinearGradient>
+  );
+};
 
 const Product = (props) => {
   const dispatch = useDispatch();
@@ -23,13 +34,23 @@ const Product = (props) => {
   const customer = useSelector((state) => state.customer.customer);
   const customerId = customer._id;
   const customerFavorites = customer.favorites;
+  const productId = props._id;
 
-  const inFavorites =
-    customerFavorites.indexOf(props._id) === -1 ? false : true;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isFavToggled, setIsFavToggled] = useState(false);
+  const [iconName, setIconName] = useState("heart-outline");
+  const [iconColor, setIconColor] = useState("black");
 
-  const [isFavToggled, setIsFavToggled] = React.useState(inFavorites);
-  const [iconName, setIconName] = React.useState("heart-outline");
-  const [iconColor, setIconColor] = React.useState("black");
+  useEffect(() => {
+    if (customerFavorites != undefined) {
+      setIsFavToggled(
+        customerFavorites.indexOf(productId) === -1 ? false : true
+      );
+      setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+    }
+  }, [customerFavorites]);
 
   useLayoutEffect(() => {
     if (isFavToggled) {
@@ -39,67 +60,89 @@ const Product = (props) => {
       setIconName("heart-outline");
       setIconColor("black");
     }
-
-    // dispatch(CustomerActions.updateFavorites(customerId, props._id));
   }, [isFavToggled]);
 
   return (
     <TouchableOpacity
       onPress={() =>
-        props.navigation.navigate("Product", { productId: props._id })
+        props.navigation.navigate("Product", { productId: productId })
       }
     >
-      <View style={styles.container}>
-        <ImageBackground
-          source={{ uri: props.image }}
-          resizeMode="contain"
-          style={styles.imageWrapper}
-          imageStyle={styles.image}
-        >
-          <View style={styles.favStockWrapper}>
-            <View style={styles.favWrapper}>
-              <Ionicons
-                name={iconName}
-                size={22}
-                color={iconColor}
-                style={styles.favIcon}
-                onPress={() => {
-                  setIsFavToggled(!isFavToggled);
-                }}
-              />
+      {isLoaded ? (
+        <View style={styles.container}>
+          <ImageBackground
+            source={{ uri: props.image }}
+            resizeMode="contain"
+            style={styles.imageWrapper}
+            imageStyle={styles.image}
+          >
+            <View style={styles.favStockWrapper}>
+              <View style={styles.favWrapper}>
+                <Ionicons
+                  name={iconName}
+                  size={22}
+                  color={iconColor}
+                  style={styles.favIcon}
+                  onPress={() => {
+                    setIsFavToggled(!isFavToggled);
+                    dispatch(
+                      CustomerActions.updateFavorites(customerId, productId)
+                    );
+                  }}
+                />
+              </View>
+            </View>
+          </ImageBackground>
+
+          <View style={styles.infoContainer}>
+            <Text numberOfLines={2} style={styles.name}>
+              {props.name}
+            </Text>
+
+            <View style={styles.ratingWrapper}>
+              <AirbnbRating showRating={false} size={12} />
+            </View>
+
+            <Text style={styles.price}>{props.price}₺</Text>
+            <View style={styles.stockCard}>
+              {props.stock <= 3 ? (
+                <Text
+                  style={
+                    Platform.OS === "ios" ? styles.stock : styles.stockAndroid
+                  }
+                >
+                  Sadece {props.stock} adet kaldı!
+                </Text>
+              ) : null}
             </View>
           </View>
-        </ImageBackground>
-
-        <View style={styles.infoContainer}>
-          <Text numberOfLines={2} style={styles.name}>
-            {props.name}
-          </Text>
-
-          <View style={styles.ratingWrapper}>
-            <AirbnbRating showRating={false} size={12} />
-          </View>
-
-          <Text style={styles.price}>{props.price}₺</Text>
-          <View style={styles.stockCard}>
-            {props.stock <= 3 ? (
-              <Text
-                style={
-                  Platform.OS === "ios" ? styles.stock : styles.stockAndroid
-                }
-              >
-                Sadece {props.stock} adet kaldı!
-              </Text>
-            ) : null}
-          </View>
         </View>
-      </View>
+      ) : (
+        <ProductLoading />
+      )}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    width: wp("45%"),
+    height: hp("45%"),
+    marginVertical: hp("3%"),
+    marginBottom: -hp("1%"),
+    marginHorizontal: wp("1%"),
+    backgroundColor: "white",
+
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 20,
+
+    borderRadius: 8,
+  },
+  loaderContainer: {
     flex: 1,
     width: wp("45%"),
     height: hp("45%"),
@@ -128,7 +171,6 @@ const styles = StyleSheet.create({
     paddingTop: hp("0.1%"),
     flexDirection: "column",
   },
-
   favWrapper: {
     flex: 0.5,
     flexDirection: "row",

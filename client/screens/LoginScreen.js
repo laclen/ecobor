@@ -28,6 +28,10 @@ import * as CustomerActions from "../redux/customerSlice";
 
 const colorScheme = Appearance.getColorScheme();
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 // validation schema
 const formSchema = yup.object({
   email: yup
@@ -160,7 +164,10 @@ const LoginScreen = (navigator) => {
 
             <TouchableOpacity
               style={styles.loginButton}
-              onPress={props.handleSubmit}
+              onPress={() => {
+                props.handleSubmit();
+                wait(2000);
+              }}
             >
               <Text style={styles.loginButtonText}>GİRİŞ YAP</Text>
             </TouchableOpacity>

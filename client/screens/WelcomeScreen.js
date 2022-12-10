@@ -14,8 +14,6 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 
-import * as CustomerActions from "../redux/customerSlice";
-import { useDispatch } from "react-redux";
 const colorScheme = Appearance.getColorScheme();
 
 const WelcomeScreen = (navigator) => {

@@ -1,14 +1,12 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import Product from "../component/Product";
 import { useDispatch, useSelector } from "react-redux";
-import * as customerActions from "../redux/customerSlice";
 import * as productActions from "../redux/productSlice";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { useEffect } from "react";
 
 const FavoritesScreen = (props) => {
   const dispatch = useDispatch();
@@ -57,7 +55,6 @@ const FavoritesScreen = (props) => {
         data={favListToRender}
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
-        extraData={customerFavList}
       />
     </View>
   );

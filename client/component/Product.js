@@ -17,7 +17,7 @@ import {
 import { useDispatch } from "react-redux";
 import * as CustomerActions from "../redux/customerSlice";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useNavigationState } from "@react-navigation/native";
 const ProductLoading = () => {
   return (
     <LinearGradient
@@ -40,19 +40,29 @@ const Product = (props) => {
 
   const [iconName, setIconName] = useState("heart-outline");
   const [iconColor, setIconColor] = useState("black");
+  const [isFav, setIsFav] = useState("false");
 
   useEffect(() => {
     if (customerFavorites != undefined) {
       if (customerFavorites.indexOf(productId) === -1) {
         setIconName("heart-outline");
         setIconColor("black");
+        setIsFav(false);
       } else {
         setIconName("heart-sharp");
         setIconColor("#b70000");
+        setIsFav(true);
       }
     }
     setIsLoaded(true);
   }, [customerFavorites]);
+
+  const routeState = useNavigationState((state) => state);
+  const routeName = routeState.routeNames[routeState.index];
+
+  if (!isFav && routeName === "Favorilerim") {
+    return null;
+  }
 
   return (
     <TouchableOpacity

@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   FlatList,
-  StatusBar,
   Platform,
   RefreshControl,
   Text,
@@ -20,16 +19,15 @@ import {
 import Colors from "../utils/colors";
 import MyStatusBar from "../component/MyStatusBar";
 
+/*
+we don't want feedscreen to refresh everytime the customerFavorites updated
+so we should print every product in favoritescreens just like we did in the feedscreen
+but in return statement check if the productid is in favorites list of customer
+return the product if it is, if it's not return null
+*/
+
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
-};
-
-const LoadingScreen = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Data is loading</Text>
-    </View>
-  );
 };
 
 const FeedScreen = (props) => {
@@ -38,7 +36,6 @@ const FeedScreen = (props) => {
   const dataStatus = useSelector((state) => state.product.status);
   const dispatch = useDispatch();
 
-  const [isLoaded, setIsLoaded] = React.useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -103,28 +100,26 @@ const FeedScreen = (props) => {
           onChangeText={(text) => searchFilter(text)}
         />
       </View>
-      {isLoaded ? (
-        <FlatList
-          numColumns={2}
-          contentContainerStyle={
-            Platform.OS === "android"
-              ? styles.listWrapperAndroid
-              : styles.listWrapperIOS
-          }
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          maxToRenderPerBatch={7}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          data={filteredData}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      ) : (
-        <LoadingScreen />
-      )}
+
+      <FlatList
+        numColumns={2}
+        contentContainerStyle={
+          Platform.OS === "android"
+            ? styles.listWrapperAndroid
+            : styles.listWrapperIOS
+        }
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        maxToRenderPerBatch={7}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        data={filteredData}
+        keyExtractor={(item) => item._id}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        extraData={refreshing}
+      />
     </View>
   );
 };

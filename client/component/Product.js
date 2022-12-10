@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,7 +14,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as CustomerActions from "../redux/customerSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -31,36 +31,28 @@ const ProductLoading = () => {
 const Product = (props) => {
   const dispatch = useDispatch();
 
-  const customer = useSelector((state) => state.customer.customer);
+  const customer = props.customer;
   const customerId = customer._id;
   const customerFavorites = customer.favorites;
   const productId = props._id;
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isFavToggled, setIsFavToggled] = useState(false);
+
   const [iconName, setIconName] = useState("heart-outline");
   const [iconColor, setIconColor] = useState("black");
 
   useEffect(() => {
     if (customerFavorites != undefined) {
-      setIsFavToggled(
-        customerFavorites.indexOf(productId) === -1 ? false : true
-      );
-      setIsLoaded(true);
-    } else {
-      setIsLoaded(false);
+      if (customerFavorites.indexOf(productId) === -1) {
+        setIconName("heart-outline");
+        setIconColor("black");
+      } else {
+        setIconName("heart-sharp");
+        setIconColor("#b70000");
+      }
     }
+    setIsLoaded(true);
   }, [customerFavorites]);
-
-  useLayoutEffect(() => {
-    if (isFavToggled) {
-      setIconName("heart-sharp");
-      setIconColor("#b70000");
-    } else {
-      setIconName("heart-outline");
-      setIconColor("black");
-    }
-  }, [isFavToggled]);
 
   return (
     <TouchableOpacity
@@ -84,9 +76,11 @@ const Product = (props) => {
                   color={iconColor}
                   style={styles.favIcon}
                   onPress={() => {
-                    setIsFavToggled(!isFavToggled);
                     dispatch(
-                      CustomerActions.updateFavorites(customerId, productId)
+                      CustomerActions.updateFavorites({
+                        customerId: customerId,
+                        productId: productId,
+                      })
                     );
                   }}
                 />

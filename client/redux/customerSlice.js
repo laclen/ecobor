@@ -31,7 +31,9 @@ export const getCustomer = createAsyncThunk(
 // add given item to favorites list of given customer or delete item if its in favorites
 export const updateFavorites = createAsyncThunk(
   "UPDATE_FAVORITES",
-  async (customerId, productId) => {
+  async (data) => {
+    const { customerId, productId } = data;
+
     // add or delete product from customer's favorites
     const putRequest = await fetch(
       `http://${BASE}:${PORT}/api/customer/favoriler/${customerId}`,
@@ -41,7 +43,7 @@ export const updateFavorites = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: productId,
+          productId,
         }),
       }
     );

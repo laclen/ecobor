@@ -8,30 +8,25 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { useEffect } from "react";
 
 const FavoritesScreen = (props) => {
   const dispatch = useDispatch();
 
   const [favListToRender, setFavListToRender] = React.useState([]);
-
-  // we need logged in customer's id to work with customer's favorites list in db
-  const customerFavList = useSelector(
-    (state) => state.customer.customer.favorites
-  );
-  // console.log("####### customerFavList #######");
-  // console.log(customerFavList);
+  // get customer info from redux store
+  const customer = useSelector((state) => state.customer.customer);
+  const customerFavList = customer.favorites;
 
   // we need to create an array with the objects of products that are corresponding of the ids inside customerFavList
   React.useEffect(() => {
+    setFavListToRender([]);
     customerFavList.map((productId) => {
       dispatch(productActions.getProductInfo(productId)).then((response) => {
         setFavListToRender((prevState) => [...prevState, response.payload]);
       });
     });
   }, [customerFavList]);
-
-  // console.log("####### favListToRender #######");
-  // console.log(favListToRender);
 
   const renderItem = ({ item }) => (
     <Product
@@ -42,6 +37,7 @@ const FavoritesScreen = (props) => {
       price={item.price}
       description={item.description}
       stock={item.stock}
+      customer={customer}
     />
   );
 
@@ -61,6 +57,7 @@ const FavoritesScreen = (props) => {
         data={favListToRender}
         keyExtractor={(item) => item._id}
         renderItem={renderItem}
+        extraData={customerFavList}
       />
     </View>
   );

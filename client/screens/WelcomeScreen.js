@@ -4,20 +4,22 @@ import {
   View,
   ImageBackground,
   TouchableOpacity,
-} from "react-native"
-import React from "react"
-import { MaterialIcons } from "@expo/vector-icons"
-import MyStatusBar from "../component/MyStatusBar"
-import Colors from "../utils/colors"
+} from "react-native";
+import React from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import MyStatusBar from "../component/MyStatusBar";
+import Colors from "../utils/colors";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen"
+} from "react-native-responsive-screen";
 
-const colorScheme = Appearance.getColorScheme()
+import * as CustomerActions from "../redux/customerSlice";
+import { useDispatch } from "react-redux";
+const colorScheme = Appearance.getColorScheme();
 
 const WelcomeScreen = (navigator) => {
-  console.log("colosrScheme: " + colorScheme)
+  console.log("colosrScheme: " + colorScheme);
   return (
     <View style={{ flex: 1 }}>
       <MyStatusBar />
@@ -48,10 +50,10 @@ const WelcomeScreen = (navigator) => {
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default WelcomeScreen
+export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,4 +82,4 @@ const styles = StyleSheet.create({
     paddingRight: wp("5%"),
     backgroundColor: colorScheme === "dark" ? Colors.fadedBlack : null,
   },
-})
+});

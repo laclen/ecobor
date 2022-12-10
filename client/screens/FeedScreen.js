@@ -33,6 +33,8 @@ const LoadingScreen = () => {
 };
 
 const FeedScreen = (props) => {
+  const customer = useSelector((state) => state.customer.customer);
+
   const dataStatus = useSelector((state) => state.product.status);
   const dispatch = useDispatch();
 
@@ -68,6 +70,7 @@ const FeedScreen = (props) => {
       price={item.price}
       description={item.description}
       stock={item.stock}
+      customer={customer}
     />
   );
 
@@ -109,7 +112,7 @@ const FeedScreen = (props) => {
               : styles.listWrapperIOS
           }
           columnWrapperStyle={{ justifyContent: "space-between" }}
-          maxToRenderPerBatch={10}
+          maxToRenderPerBatch={7}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={filteredData}
@@ -134,9 +137,9 @@ const styles = StyleSheet.create({
   },
   searchBarWrapper: {
     width: wp("100%"),
-    height: hp("15%"),
+    height: hp("10%"),
 
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : hp("2%"),
+    justifyContent: "center",
     paddingHorizontal: wp("3.6%"),
 
     // backgroundColor: "red",
